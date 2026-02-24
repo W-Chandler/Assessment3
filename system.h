@@ -9,22 +9,19 @@
 #include "disk.h"
 
 class System {
-public:
+private:
 std::vector<Disk> disks;
-double boxSize;
-double displacement;
+const double boxSize;
+const double displacement;
 std::mt19937 gen;
-std::uniform_real_distribution<double> dist;
+bool overlap(int i) const;
+void enforceBoundaries(Disk & disk);
 
+public:
 System(int N, double displacement,double radius, double box_size, int seed);
 
 void step() ;
-
-void save(const std::string &filename);
-
-bool overlap(int i);
-
-void enforceBoundaries(Disk & disk) ;
+void save(const std::string &filename) const;
 double uniform(double min, double max);
 };
 #endif // !SYSTEM_H

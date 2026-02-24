@@ -3,12 +3,11 @@
 #include "system.h"
 #include "disk.h"
 
-System::System(int N, double displacement,double radius, double boxSize, int seed) {
+System::System(int N, double displacement,double radius, double boxSize, int seed)
 
-        this->boxSize= boxSize;
-        this->  dist = std::uniform_real_distribution<double>(0, 1);
-        this->displacement=displacement;
-        gen = std::mt19937(seed);
+        : boxSize(boxSize),
+        displacement(displacement),
+        gen(seed){
         
         int nSide = static_cast<int>(boxSize/ (2*radius));
 
@@ -19,7 +18,7 @@ System::System(int N, double displacement,double radius, double boxSize, int see
         }
     }   
 
-bool System::overlap(int i){
+bool System::overlap(int i) const{
     for (int j = 0; j < disks.size(); ++j) {
         if (i!=j && disks[i].distance(disks[j]) < (disks[i].getRadius() + disks[j].getRadius()) ) {
             return true;
@@ -72,12 +71,12 @@ double System::uniform(double min, double max)
 }
 
 
-void System::save(const std::string &filename){
+void System::save(const std::string &filename) const{
     // save state of disks to file
     std::ofstream outFile(filename);
     outFile<<disks.size()<<std::endl;
     outFile<<"Comment"<<std::endl;
-    for (Disk& disk : disks) {
+    for (const Disk& disk : disks) {
       outFile<<"A "<<disk.getX()<<" "<<disk.getY()<<" "<<disk.getRadius()<<std::endl;
 
     }
