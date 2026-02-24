@@ -1,0 +1,9 @@
+## Ignores config folder and simulation output files
+confs/
+.DS_Store
+
+simulation
+*.out
+*.exe
+
+*.o
