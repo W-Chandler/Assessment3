@@ -21,7 +21,7 @@ System::System(int N, double displacement,double radius, double boxSize, int see
 
 bool System::overlap(int i){
     for (int j = 0; j < disks.size(); ++j) {
-        if (i!=j && disks[i].distance(disks[j]) < (disks[i].radius + disks[j].radius) ) {
+        if (i!=j && disks[i].distance(disks[j]) < (disks[i].getRadius() + disks[j].getRadius()) ) {
             return true;
         }
     }
@@ -29,11 +29,11 @@ bool System::overlap(int i){
 }
 
 void System::step() {
-    for (size_t i=0; i<disks.size(); ++i) 
+    for (size_t i = 0; i<disks.size(); ++i) 
     {
         int selected_disk = std::rand() % disks.size();
-        double oldx = disks[selected_disk].x;
-        double oldy = disks[selected_disk].y;
+        double oldx = disks[selected_disk].getX();
+        double oldy = disks[selected_disk].getY();
         double dx = uniform(-displacement, displacement);
         double dy = uniform(-displacement, displacement);
         this->disks[selected_disk].move(dx, dy);
@@ -41,19 +41,28 @@ void System::step() {
         enforceBoundaries(disks[selected_disk]);
 
         if (overlap(selected_disk)){
-            disks[selected_disk].x = oldx;
-            disks[selected_disk].y = oldy;
+            disks[selected_disk].move(oldx - disks[selected_disk].getX(), oldy - disks[selected_disk].getY());
         }
-       
     }
 }
 void System::enforceBoundaries(Disk & disk) {
-        if (disk.x < 0) disk.x = 0;
-        if (disk.x > boxSize) disk.x = boxSize;
-        if (disk.y < 0) disk.y = 0;
-        if (disk.y > boxSize) disk.y = boxSize;
-    }
+    double x = disk.getX();
+    double y = disk.getY();
+    double r = disk.getRadius();
 
+    if (x < r){
+        disk.move(r - x, 0);
+    }
+    else if (x > boxSize - r){
+        disk.move(boxSize - r - x, 0);
+    }
+    if (y < r){
+        disk.move(0, r - y); 
+    }
+    else if (y > boxSize - r){
+        disk.move(0, boxSize - r - y);
+        }
+}
 // Created uniform function to generate random numbers between min and max  
 double System::uniform(double min, double max)
 {
@@ -69,7 +78,7 @@ void System::save(const std::string &filename){
     outFile<<disks.size()<<std::endl;
     outFile<<"Comment"<<std::endl;
     for (Disk& disk : disks) {
-      outFile<<"A "<<disk.x<<" "<<disk.y<<" "<<disk.radius<<std::endl;
+      outFile<<"A "<<disk.getX()<<" "<<disk.getY()<<" "<<disk.getRadius()<<std::endl;
 
     }
     outFile.close();
