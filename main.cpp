@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-// HINT: COMPLETE THE INCLUDE STATEMENT
+// Linked system.h to main.cpp
+#include "system.h"
 
 
 /**
@@ -9,7 +10,7 @@
  * This function initializes the program and manages execution.
  */
 int main() {
-    // number of disks
+    // number of disks, maximum displacement, disk radius, box size
     int N = 20;
     double maxDisplacement  = 0.6;
     double dt = 0.5;
