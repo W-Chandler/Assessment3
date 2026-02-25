@@ -3,7 +3,5 @@ confs/
 .DS_Store
 
 simulation
-*.out
-*.exe
 
 *.o
